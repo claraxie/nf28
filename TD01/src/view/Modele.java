@@ -45,7 +45,7 @@ public class Modele{
 	}
 		
 	public void setListImage() {
-		File folder = new File("D:/java-oxygen/TD01/images");
+		File folder = new File("./images");
 		File[] listFiles = folder.listFiles();
 		
 		for (File file : listFiles) {

@@ -10,7 +10,7 @@ import javafx.scene.image.Image;
 
 public class controller {
 	private View view;
-	private Modele modele;	
+	private Modele modele;
 	
 	public controller(View v, Modele m) {
 		view = v;
