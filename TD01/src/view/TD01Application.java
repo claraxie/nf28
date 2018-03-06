@@ -11,15 +11,14 @@ public class TD01Application
 	public void start(Stage stage) throws 
 		Exception {
 		stage.setTitle("Hello");
-		
-		View panel = new View();
 
+		View panel = new View();		
 		Scene scene = new Scene
-				(panel,512,104);
+				(panel,512,512);
 		stage.setScene(scene);
 		stage.show();
 		
-		Modele mod = new Modele();
+		Modele mod = new Modele();		
 		controller cont = new controller(panel, mod);
 	}
 	
