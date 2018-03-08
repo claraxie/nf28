@@ -36,6 +36,9 @@
                      </children>
                   </AnchorPane>
               </content>
+               <GridPane.margin>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </GridPane.margin>
             </TitledPane>
             <TitledPane animated="false" collapsible="false" text="Adresse" GridPane.rowIndex="1">
               <content>
@@ -52,6 +55,9 @@
                      </children>
                   </AnchorPane>
               </content>
+               <GridPane.margin>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </GridPane.margin>
             </TitledPane>
             <TitledPane animated="false" collapsible="false" text="Données personnelles" GridPane.rowIndex="2">
               <content>
@@ -69,6 +75,9 @@
                      </children>
                   </AnchorPane>
               </content>
+               <GridPane.margin>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </GridPane.margin>
             </TitledPane>
             <Button fx:id="valider" mnemonicParsing="false" text="Valider" GridPane.rowIndex="3">
                <GridPane.margin>
