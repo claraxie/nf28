@@ -40,6 +40,10 @@ public class Contact {
 		return pays;
 	}
 	
+	public void setPays(String n) {
+		pays.set(n);
+	}
+		
 	public StringProperty getNaissance() {
 		return naissance;
 	}

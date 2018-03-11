@@ -23,4 +23,6 @@ public class Country {
 	public ObservableList<String> getCountries() {
 		return pays;
 	}
+	
+	
 }
