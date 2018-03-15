@@ -86,10 +86,7 @@
             <Button fx:id="valider" mnemonicParsing="false" onAction="#validation" text="Valider" GridPane.rowIndex="3">
                <GridPane.margin>
                   <Insets left="10.0" />
-               </GridPane.margin>
-               <tooltip>
-                  <Tooltip fx:id="tooltip" minHeight="100.0" minWidth="99.0" text="Tooltip" />
-               </tooltip></Button>
+               </GridPane.margin></Button>
          </children>
       </GridPane>
    </children>
