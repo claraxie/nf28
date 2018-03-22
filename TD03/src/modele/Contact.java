@@ -1,62 +1,150 @@
 package modele;
 
+import java.io.Externalizable;
+import java.io.IOException;
+import java.io.ObjectInput;
+import java.io.ObjectOutput;
+
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
-public class Contact {
-	StringProperty prenom = new SimpleStringProperty();
-	StringProperty nom = new SimpleStringProperty();
-	StringProperty adresse = new SimpleStringProperty();
-	StringProperty postal = new SimpleStringProperty();
-	StringProperty ville = new SimpleStringProperty();
-	StringProperty pays = new SimpleStringProperty();
-	StringProperty naissance = new SimpleStringProperty();
-	BooleanProperty sexeF = new SimpleBooleanProperty();
-	BooleanProperty sexeM = new SimpleBooleanProperty();
+public class Contact implements Externalizable {
+
+	private String prenom = "";
+	private String nom = "";
+	private String adresse = "";
+	private String postal = "";
+	private String ville = "";
 	
-	public StringProperty getPrenom() {
+	private String pays = "";
+	private String naissance = "";
+	private Boolean sexeF = false;
+	private Boolean sexeM = false;
+			
+	private Group group = null;	
+	
+	public Contact() {
+		
+	}
+	
+	public Contact(Group grp) {
+		group = grp;
+	}
+	
+	public void setGroup(Group grp) {
+		group = grp;
+	}
+	
+	public Group getGroup() {
+		return group;
+	}
+	
+	public String getPrenom() {
 		return prenom;
 	}
 	
-	public StringProperty getNom() {
+	public String getNom() {
 		return nom;
 	}
 	
-	public StringProperty getAdresse() {
+	public String getAdresse() {
 		return adresse;
 	}
 	
-	public StringProperty getPostal() {
+	public String getPostal() {
 		return postal;
 	}
 	
-	public StringProperty getVille() {
+	public String getVille() {
 		return ville;
 	}
 	
-	public StringProperty getPays() {
+	public String getPays() {
 		return pays;
 	}
-	
-	public void setPays(String n) {
-		pays.set(n);
-	}
 		
-	public StringProperty getNaissance() {
+	public String getNaissance() {
 		return naissance;
 	}
 	
-	public void setNaissance(String n) {
-		naissance.set(n);
-	}
-	
-	public BooleanProperty getSexeF() {
+	public Boolean getSexeF() {
 		return sexeF;
 	}
 	
-	public BooleanProperty getSexeM() {
+	public Boolean getSexeM() {
 		return sexeM;
+	}
+	
+	public void setPrenom(String p) {
+		this.prenom = p;
+	}
+	
+	public void setNom(String n) {
+		System.out.println("setname");
+		System.out.println(n);
+		this.nom = n;
+	}
+	
+	public void setAdresse(String a) {
+		this.adresse = a;
+	}
+	
+	public void setPostal(String p) {
+		this.postal = p;
+	}
+	
+	public void setVille(String v) {
+		this.ville = v;
+	}
+	
+	public void setNaissance(String n) {
+		this.naissance = n;
+	}
+	
+	public void setPays(String n) {
+		pays = n;
+	}
+	
+	public void setSexeF(Boolean b) {
+		sexeF = b;
+	}
+	
+	public void setSexeM(Boolean b) {
+		sexeM = b;
+	}
+	
+	public String toString() {
+		if (prenom.isEmpty() && nom.isEmpty())
+			return "new contact";
+		else
+			return prenom + " " + nom;
+	}
+
+	@Override
+	public void writeExternal(ObjectOutput out) throws IOException {
+		// TODO Auto-generated method stub
+		out.writeUTF(adresse);
+		out.writeUTF(postal);
+		out.writeUTF(ville);
+		out.writeUTF(pays);
+		out.writeUTF(prenom);
+		out.writeUTF(nom);
+		out.writeUTF(naissance);
+		out.writeUTF(sexeF.toString());
+		out.writeUTF(sexeM.toString());
+	}
+
+	@Override
+	public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
+		// TODO Auto-generated method stub		
+		adresse = in.readUTF();
+		postal = in.readUTF();
+		ville = in.readUTF();
+		pays = in.readUTF();
+		prenom = in.readUTF();
+		nom = in.readUTF();
+		naissance = in.readUTF();	
 	}
 }
