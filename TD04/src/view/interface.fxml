@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.TitledPane?>
+<?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.control.TreeView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.RowConstraints?>
+
+<Pane prefHeight="638.0" prefWidth="842.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <AnchorPane fx:id="contactPane" layoutX="221.0" minHeight="794.0" minWidth="610.0" prefHeight="800.0" prefWidth="610.0" visible="false">
+         <children>
+            <GridPane layoutX="4.0" layoutY="4.0" prefHeight="668.0" prefWidth="610.0" AnchorPane.bottomAnchor="132.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+              <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+              </columnConstraints>
+              <rowConstraints>
+                <RowConstraints maxHeight="120.00000610351563" minHeight="0.0" prefHeight="85.60000305175781" vgrow="SOMETIMES" />
+                <RowConstraints maxHeight="268.99998779296874" minHeight="10.0" prefHeight="224.0000183105469" vgrow="SOMETIMES" />
+                <RowConstraints maxHeight="243.0" minHeight="10.0" prefHeight="197.999951171875" vgrow="SOMETIMES" />
+                  <RowConstraints maxHeight="108.800048828125" minHeight="0.0" prefHeight="108.800048828125" vgrow="SOMETIMES" />
+              </rowConstraints>
+               <children>
+                  <TitledPane animated="false" collapsible="false" text="Prénom et nom">
+                    <content>
+                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                           <children>
+                              <TextField fx:id="prenom" layoutX="27.0" layoutY="15.0" promptText="Prénom" />
+                              <TextField fx:id="nom" layoutX="288.0" layoutY="15.0" promptText="Nom" />
+                           </children>
+                        </AnchorPane>
+                    </content>
+                     <GridPane.margin>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                     </GridPane.margin>
+                  </TitledPane>
+                  <TitledPane animated="false" collapsible="false" text="Adresse" GridPane.rowIndex="1">
+                    <content>
+                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="242.0" prefWidth="1012.0">
+                           <children>
+                              <TextField fx:id="adresse" layoutX="314.0" layoutY="31.0" />
+                              <TextField fx:id="postal" layoutX="314.0" layoutY="72.0" />
+                              <TextField fx:id="ville" layoutX="314.0" layoutY="110.0" />
+                              <Label layoutX="14.0" layoutY="43.0" text="Numéro et libellé de la voie :" />
+                              <Label layoutX="148.0" layoutY="78.0" text="Code Postal :" />
+                              <Label layoutX="214.0" layoutY="110.0" text="Ville :" />
+                              <Label layoutX="213.0" layoutY="155.0" text="Pays :" />
+                              <ChoiceBox fx:id="pays" layoutX="314.0" layoutY="149.0" prefWidth="150.0" />
+                           </children>
+                        </AnchorPane>
+                    </content>
+                     <GridPane.margin>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                     </GridPane.margin>
+                  </TitledPane>
+                  <TitledPane animated="false" collapsible="false" text="Données personnelles" GridPane.rowIndex="2">
+                    <content>
+                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="136.0" prefWidth="510.0">
+                           <children>
+                              <DatePicker fx:id="naissance" layoutX="320.0" layoutY="12.0" />
+                              <Label layoutX="214.0" layoutY="64.0" text="Sexe :" />
+                              <RadioButton fx:id="sexeF" layoutX="463.0" layoutY="64.0" mnemonicParsing="false" prefHeight="18.0" prefWidth="43.0" text="F">
+                                 <toggleGroup>
+                                    <ToggleGroup fx:id="sexe" />
+                                 </toggleGroup>
+                              </RadioButton>
+                              <RadioButton fx:id="sexeM" layoutX="335.0" layoutY="64.0" mnemonicParsing="false" prefHeight="18.0" prefWidth="44.0" text="M" toggleGroup="$sexe" />
+                              <Label layoutX="98.0" layoutY="18.0" text="Date de naissance :" />
+                           </children>
+                        </AnchorPane>
+                    </content>
+                     <GridPane.margin>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                     </GridPane.margin>
+                  </TitledPane>
+                  <Button fx:id="valider" mnemonicParsing="false" text="Valider" GridPane.rowIndex="3">
+                     <GridPane.margin>
+                        <Insets left="10.0" />
+                     </GridPane.margin>
+                  </Button>
+               </children>
+            </GridPane>
+         </children>
+      </AnchorPane>
+      <TreeView fx:id="tree" layoutX="6.0" layoutY="4.0" prefHeight="590.0" prefWidth="215.0" />
+      <Button fx:id="delete" layoutX="50.0" layoutY="600.0" maxHeight="25.0" maxWidth="25.0" minHeight="25.0" minWidth="25.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" text="-" />
+      <Button fx:id="add" layoutX="14.0" layoutY="600.0" maxHeight="25.0" maxWidth="25.0" minHeight="25.0" minWidth="25.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" text="+" />
+      <MenuBar layoutX="99.0" layoutY="594.0">
+        <menus>
+          <Menu fx:id="save" mnemonicParsing="false" text="Save">
+            <items>
+              <MenuItem mnemonicParsing="false" text="Close" />
+            </items>
+          </Menu>
+          <Menu fx:id="load" mnemonicParsing="false" text="Load">
+            <items>
+              <MenuItem mnemonicParsing="false" text="Delete" />
+            </items>
+          </Menu>
+        </menus>
+      </MenuBar>
+   </children>
+</Pane>
