@@ -82,10 +82,10 @@ public class Controleur implements Initializable {
 	private Button add;
 	
 	@FXML
-	private MenuItem save;
+	private Button save;
 	
 	@FXML
-	private MenuItem load;
+	private Button load;
 	
 	// current tree item
 	TreeItem<Object> currentItem = null;
