@@ -24,6 +24,18 @@ public class Contact implements Externalizable {
 		
 	}
 	
+	public Contact(ContactModele c) {
+		prenom = c.getPrenom();
+		nom = c.getNom();
+		adresse = c.getAdresse();
+		postal = c.getPostal();
+		ville = c.getVille();
+		pays = c.getPays();
+		naissance = c.getNaissance();
+		sexeF = c.getSexeF();
+		sexeM = c.getSexeM();		
+	}
+	
 	public Contact(Group grp) {
 		group = grp;
 	}

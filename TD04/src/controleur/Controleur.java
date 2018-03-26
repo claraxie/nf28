@@ -43,6 +43,7 @@ public class Controleur implements Initializable {
 	Image contactIcon = new Image(getClass().getResourceAsStream("/img/contact.png"));
 		
 	private Modele modele;
+	private static final long serialVersionUID = 1L;
 	
 	@FXML
 	private Button valider;
@@ -141,43 +142,15 @@ public class Controleur implements Initializable {
 		
 		add.setOnAction(evt -> modele.create(currentItem));
 		delete.setOnAction(evt -> modele.delete(currentItem));
-		save.setOnAction(evt -> {
-			currentItem = rootNode;
-			parentItem = rootNode;			
-			FileChooser fc = new FileChooser();
-			fc.setTitle("Save File");
-			
-			File selectedFile = fc.showOpenDialog(new Stage());
-			if (selectedFile != null) {
-				try {
-					Workspace work = new Workspace(modele.groupes);
-					work.save(selectedFile);
-				} catch (IOException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-			}
-		});
+		save.setOnAction(evt -> modele.save());
 		
 		sexeF.selectedProperty().bindBidirectional(modele.getSexeF());
 		sexeM.selectedProperty().bindBidirectional(modele.getSexeM());
 		
-		load.setOnAction(evt -> {
+		load.setOnAction(evt -> {			
 			currentItem = rootNode;
-			parentItem = rootNode;			
-			FileChooser fc = new FileChooser();
-			fc.setTitle("Load File");
-			
-			File selectedFile = fc.showOpenDialog(new Stage());
-			if (selectedFile != null) {
-				try {
-					Workspace w = new Workspace();
-					System.out.println(w.fromFile(selectedFile));
-				} catch (Exception e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
+			parentItem = rootNode;
+			modele.load();
 		});
 		
 		

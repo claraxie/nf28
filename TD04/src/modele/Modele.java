@@ -13,11 +13,14 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
 import javafx.scene.control.TreeItem;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 
 public class Modele {
 	private Country listPays;
 	public ObservableList<Group> groupes = FXCollections.observableArrayList();
 	public ObservableMap<String,String> errorMsgs = FXCollections.observableHashMap();
+	private static final long serialVersionUID = 1L;
 	
 	StringProperty prenom = new SimpleStringProperty(null, "prenom", "");
 	StringProperty nom = new SimpleStringProperty(null, "nom", "");
@@ -203,33 +206,37 @@ public class Modele {
 		grp.contacts.add(new Contact(grp));
 	}
 	
-//	public void save() {
-//		try {
-//			ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("contacts")); 
-//			oos.writeObject(groupes.toArray());
-//			oos.close();
-//		} catch (IOException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-//	}
+	public void save() {
+		FileChooser fc = new FileChooser();
+		fc.setTitle("Save File");		
+		File selectedFile = fc.showOpenDialog(new Stage());
+			
+		Workspace work = new Workspace();
+		work.setGroups(groupes);		
+		try {
+			work.save(selectedFile);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	}
 	
-//	public void load(File file) {
-//		try {
-//			ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file));
-//			Object[] objs = (Object[])ois.readObject();
-//			groupes.clear();
-//			for (Object obj : objs) {	
-//				groupes.add((Group)obj);
-//				System.out.println(((Group)obj).contacts.size());
-//			}
-//			ois.close();
-//		} catch(IOException e) {
-//			e.printStackTrace();
-//		} catch (ClassNotFoundException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-//	}
-	
+	public void load() {
+		FileChooser fc = new FileChooser();
+		fc.setTitle("Load File");
+		File selectedFile = fc.showOpenDialog(new Stage());
+		
+		Workspace work = new Workspace();
+		work.groupes.clear();
+		try {
+			work.groupes = work.fromFile(selectedFile);
+			for (GroupModele g : work.groupes) {
+				groupes.add(new Group(g));
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}		
+	}
 }

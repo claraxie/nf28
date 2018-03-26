@@ -64,7 +64,7 @@ public class ContactModele extends ModelJson{
 		return sexeM;
 	}
 	
-	public Contact getContact() {
+	/*public Contact getContact() {
 		Contact c = new Contact();
 		
 		c.setNaissance(naissance);
@@ -78,5 +78,5 @@ public class ContactModele extends ModelJson{
 		c.setSexeM(sexeM);   	
 
 		return c;
-	}
+	}*/
 }

@@ -4,7 +4,11 @@ import java.util.ArrayList;
 
 public class GroupModele extends ModelJson{
 	private String groupe;
-	private ArrayList<ContactModele> contacts;
+	private ArrayList<ContactModele> contacts = new ArrayList<ContactModele>();
+	
+	public GroupModele() {
+		
+	}
 	
 	public GroupModele(String g, ArrayList<ContactModele> c) {
 		groupe = g;

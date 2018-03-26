@@ -4,21 +4,26 @@ import java.io.Externalizable;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.ObjectInput;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutput;
 import java.io.ObjectOutputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import javafx.collections.ObservableList;
 
-public class Workspace implements Externalizable{
+public class Workspace implements Externalizable {
 	private static final ObjectMapper mapper = new ObjectMapper();
 	public ArrayList<GroupModele> groupes = new ArrayList<GroupModele>();
-	public ArrayList<ContactModele> contacts = new ArrayList<ContactModele>();
+	
 	
 	public Workspace() {
 		
@@ -35,54 +40,54 @@ public class Workspace implements Externalizable{
 		groupes.add(gg);
 	}
 	
-	public void addContact(Contact c) {
-		contacts.add(new ContactModele(c));
-		System.out.println(contacts);
-	}
 	
 	public void rmGroup(Group g) {
 		groupes.remove(new GroupModele(g));
 	}
 	
-	public void rmContact(Contact c) {
-		contacts.remove(new ContactModele(c));
+	public ArrayList<GroupModele> getGroupes(){
+		return groupes;
 	}
 	
 	
+	
 	public ArrayList<GroupModele> fromFile(File file) throws Exception{
-		ObjectInputStream iis = new ObjectInputStream(new FileInputStream(file));
+
+		String iStream = new String(Files.readAllBytes(file.toPath()));
+		System.out.println(iStream);
 		
-		String iStream;
-		
-		iStream = iis.readUTF();
-		
-		groupes = getMapper().readValue(iStream, Workspace.class).groupes;
-		
+		WorkspaceModele work = new WorkspaceModele();
+		work = ModelJson.deserialize(iStream, WorkspaceModele.class);
+		groupes = work.groupes;
+		System.out.println(groupes);
 		return groupes;
 	}
 	
 	@Override
 	public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
-//		String iStream;
-//		
-//		iStream = in.readUTF();
-//		
-//		groupes = getMapper().readValue(iStream, Workspace.class).groupes;
+		/*String iStream;
+	
+		iStream = in.readUTF();
+		
+		groupes = getMapper().readValue(iStream, Workspace.class).groupes; */
 	}
 	
 	public void save(File f) throws IOException{
-		System.out.println(groupes);
-		System.out.println(contacts);
-		ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(f));
-		oos.writeObject(this);
-		oos.close();
+		FileWriter file;
+		file = new FileWriter(f);
+		String oStream = getMapper().writeValueAsString(this);
+		System.out.println(oStream);
+		file.write(oStream);
+		file.flush();
+		file.close();
 	}
+		
+		
 	
 	@Override
 	public void writeExternal(ObjectOutput out) throws IOException {
-		String oStream = getMapper().writeValueAsString(this);
-		
-		out.writeUTF(oStream);
+		//String oStream = getMapper().writeValueAsString(this);	
+		//out.writeUTF(oStream);
 
 	}
 	
@@ -91,6 +96,8 @@ public class Workspace implements Externalizable{
 	}
 	
 	public void setGroups(ObservableList<Group> grps) {
-		
+		for (Group g : grps) {
+			groupes.add(new GroupModele(g));
+		}		
 	}
 }
