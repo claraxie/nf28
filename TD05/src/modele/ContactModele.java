@@ -1,5 +1,7 @@
 package modele;
 
+import java.time.LocalDate;
+
 public class ContactModele extends ModelJson{
 	private String prenom = "";
 	private String nom = "";

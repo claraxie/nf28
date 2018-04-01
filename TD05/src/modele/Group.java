@@ -24,6 +24,10 @@ public class Group {
 		return groupe;
 	}
 	
+	public void setGroupe(String s) {
+		groupe = new SimpleStringProperty(null, "", s); 
+	}
+	
 	public String toString() {
 		return groupe.getValue();
 	}

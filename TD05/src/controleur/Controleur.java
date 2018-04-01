@@ -15,6 +15,8 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.chart.BarChart;
+import javafx.scene.chart.CategoryAxis;
+import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.PieChart;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
@@ -118,12 +120,6 @@ public class Controleur implements Initializable {
 	
 	@FXML
 	private BarChart<Number, String> histhor;
-	 
-//    private Tooltip tooltip;
-//	
-//	private ArrayList<TextField> textField;
-//	
-//	private ArrayList<String> emptyElement;
 	
 	
 	public Controleur(Modele m) {
@@ -151,7 +147,7 @@ public class Controleur implements Initializable {
 		adresse.textProperty().bindBidirectional(modele.getAdresse());
 		postal.textProperty().bindBidirectional(modele.getPostal());
 		ville.textProperty().bindBidirectional(modele.getVille());
-		
+		//pays.getSelectionModel().selectedItemProperty().addListener((observable, oldVal, newVal) -> modele.setPays(newVal));		
 		add.setOnAction(evt -> modele.create(currentItem));
 		delete.setOnAction(evt -> modele.delete(currentItem));
 		save.setOnAction(evt -> modele.save());
@@ -164,8 +160,7 @@ public class Controleur implements Initializable {
 			parentItem = rootNode;
 			modele.load();
 		});
-		
-		
+				
 		valider.setOnAction(evt -> {
 			if (modele.validation((Contact)currentItem.getValue())){
 				TreeModificationEvent<Object> event = new  TreeModificationEvent<>(TreeItem.valueChangedEvent(), currentItem);
@@ -175,17 +170,25 @@ public class Controleur implements Initializable {
 		
 		naissance.valueProperty().addListener(
 				(obj,oldValue,newValue)->{
-					Object v = newValue.toString();
-					StringProperty nai = new SimpleStringProperty((String) v);
-					modele.setNaissance(nai);
+					modele.setNaissance(newValue.toString());
 				}
 			);
 	
 		modele.getNaissance().addListener(
 				(obj,oldValue,newValue)->{
-					naissance.setValue(LocalDate.parse(newValue));
+					System.out.println("naissance" + newValue);
+					if (!newValue.isEmpty())
+						naissance.setValue(LocalDate.parse(newValue));
 				}
 			);
+		
+		pays.valueProperty().addListener(	
+			(obj,oldValue,newValue)->{
+				Object v = newValue.toString();
+				StringProperty pays = new SimpleStringProperty((String) v);
+				modele.setPays(newValue);
+		});
+		
 		
 		
 		modele.getPays().addListener(
@@ -398,13 +401,11 @@ public class Controleur implements Initializable {
  
         @Override
         public void startEdit() {
-        	
         	if (!(getTreeItem().getValue() instanceof Group)) {
 				return;
 			}
         	
             super.startEdit();
-            
             
             if (textField == null) {
                 createTextField();
@@ -417,28 +418,27 @@ public class Controleur implements Initializable {
         @Override
         public void cancelEdit() {
             super.cancelEdit();
-            setText((String) getItem());
+            setText(((Group) getTreeItem().getValue()).toString());
             setGraphic(getTreeItem().getGraphic());
         }
  
         @Override
         public void updateItem(Object item, boolean empty) {
             super.updateItem(item, empty);
- 
+            
             if (empty) {
                 setText(null);
                 setGraphic(null);
             } else {
                 if (isEditing()) {
                     if (textField != null) {
-                        textField.setText(getString());
+                        textField.setText(getString());         
                     }
                     setText(null);
                     setGraphic(textField);
                 } else {
                     setText(getString());
-                    setGraphic(getTreeItem().getGraphic());
-                   
+                    setGraphic(getTreeItem().getGraphic()); 
                 }
             }
         }
@@ -450,6 +450,7 @@ public class Controleur implements Initializable {
                 @Override
                 public void handle(KeyEvent t) {
                     if (t.getCode() == KeyCode.ENTER) {
+                    	((Group)getTreeItem().getValue()).getGroupeProperty().set(textField.getText());
                         commitEdit(textField.getText());
                     } else if (t.getCode() == KeyCode.ESCAPE) {
                         cancelEdit();

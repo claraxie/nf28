@@ -7,9 +7,11 @@ import java.io.ObjectInputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.stream.Collectors;
 
 import javafx.beans.property.BooleanProperty;
@@ -23,6 +25,7 @@ import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
 import javafx.scene.chart.PieChart;
 import javafx.scene.chart.XYChart;
+import javafx.scene.chart.XYChart.Data;
 import javafx.scene.control.TreeItem;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -94,8 +97,12 @@ public class Modele {
 		return sexeM;
 	}
 	
-	public void setNaissance(StringProperty n) {
-		naissance = n;
+	public void setNaissance(String n) {
+		naissance.set(n);
+	}
+	
+	public void setPays(String p) {
+		pays.set(p);
 	}
 	
 	public ObjectProperty<XYChart.Series<String, Number>> getChartHistVertProperty(){
@@ -157,7 +164,6 @@ public class Modele {
     			
     			// validate
     			if (complete) {
-    				System.out.println(nom.get());
     				c.setNaissance(naissance.get());
     				c.setVille(ville.get());
     				c.setPays(pays.get());
@@ -243,16 +249,89 @@ public class Modele {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
+		
+		// piechart
 		groupeCirculaire.clear();
 		groupes.stream().forEach(g -> groupeCirculaire.add(new PieChart.Data(g.getName(), g.contacts.size())));
 		
-		Map<String, Integer> villes = new HashMap<String, Integer>();
+		// bar char vertical
+		Map<String, Number> villes = new HashMap<String, Number>();
 		groupes.stream().forEach(g -> g.contacts.stream().forEach(c -> mapAjout(villes, c.getVille())));
-		
 		XYChart.Series<String, Number> serie = new XYChart.Series<>();
 		villes.forEach((v,n) -> serie.getData().add(new XYChart.Data<String, Number>(v,n)));
 		histVertSerie.setValue(serie);
+		
+		// bar chart horizontal
+		ArrayList<Contact> preSerie = new ArrayList<Contact>();
+		ArrayList<Contact> deuSerie = new ArrayList<Contact>();
+		ArrayList<Contact> troSerie = new ArrayList<Contact>();
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-mm-dd");
+		
+		for(Group g : groupes) {
+			for(Contact c : g.contacts) {
+				try {
+					if(formatter.parse(c.getNaissance()).before(formatter.parse("1990-01-01")))
+					{	
+						preSerie.add(c);
+					}
+					else if(formatter.parse(c.getNaissance()).after(formatter.parse("2000-01-01")))
+					{
+						troSerie.add(c);
+					}
+					else {
+						deuSerie.add(c);
+					}
+				} catch (ParseException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
+		
+		System.out.println(preSerie);
+		System.out.println(deuSerie);
+		System.out.println(troSerie);	
+		ArrayList<XYChart.Series<Number, String>> seriesList = new ArrayList<XYChart.Series<Number, String>>();
+		
+		XYChart.Series<Number, String> seriesHors1 = new XYChart.Series<Number, String>();
+		seriesHors1.setName("<1990-01-01");	
+		Map<String, Number> grps1 = new HashMap<String, Number>();
+		for (Contact c : preSerie) {
+			mapAjout(grps1, c.getGroup().getName());
+		}
+		
+	    for (Entry<String, Number> entry : grps1.entrySet()) {
+	    	seriesHors1.getData().add(new XYChart.Data<>(entry.getValue(), entry.getKey()));
+	    }
+	    seriesList.add(seriesHors1);
+	    
+		XYChart.Series<Number, String> seriesHors2 = new XYChart.Series<Number, String>();
+		seriesHors2.setName("entre");	
+		Map<String, Number> grps2 = new HashMap<String, Number>();
+		for (Contact c : deuSerie) {
+			mapAjout(grps2, c.getGroup().getName());
+		}
+
+	    for (Entry<String, Number> entry : grps2.entrySet()) {
+	    	seriesHors2.getData().add(new XYChart.Data<>(entry.getValue(), entry.getKey()));
+	    }
+	    seriesList.add(seriesHors2);
+	    
+	    
+	    
+		XYChart.Series<Number, String> seriesHors3 = new XYChart.Series<Number, String>();
+		seriesHors3.setName(">2000-01-01");	
+		Map<String, Number> grps3 = new HashMap<String, Number>();
+		for (Contact c : troSerie) {
+			mapAjout(grps3, c.getGroup().getName());
+		}
+
+	    for (Entry<String, Number> entry : grps3.entrySet()) {
+	    	seriesHors3.getData().add(new XYChart.Data<>(entry.getValue(), entry.getKey()));
+	    }
+	    seriesList.add(seriesHors3);
+	    
+	    histHorSerie.setValue(seriesList);
 	}
 	
 	public void load() {
@@ -272,31 +351,38 @@ public class Modele {
 			e.printStackTrace();
 		}
 		
+		//pie chart
 		groupeCirculaire.clear();
 		groupes.stream().forEach(g -> groupeCirculaire.add(new PieChart.Data(g.getName(), g.contacts.size())));
 		
-		Map<String, Integer> villes = new HashMap<String, Integer>();
-		groupes.stream().forEach(g -> g.contacts.stream().forEach(c -> mapAjout(villes, c.getVille())));
-		
+		// bar chart vertical
+		Map<String, Number> villes = new HashMap<String, Number>();
+		groupes.stream().forEach(g -> g.contacts.stream().forEach(c -> mapAjout(villes, c.getVille())));		
 		XYChart.Series<String, Number> serie = new XYChart.Series<String, Number>();
 		villes.forEach((v,n) -> serie.getData().add(new XYChart.Data<String, Number>(v,n)));
 		histVertSerie.setValue(serie);
 		
-		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-mm-dd");
 		
+		// bar chart horizontal
 		ArrayList<Contact> preSerie = new ArrayList<Contact>();
 		ArrayList<Contact> deuSerie = new ArrayList<Contact>();
 		ArrayList<Contact> troSerie = new ArrayList<Contact>();
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-mm-dd");
 		
 		for(Group g : groupes) {
 			for(Contact c : g.contacts) {
 				try {
 					if(formatter.parse(c.getNaissance()).before(formatter.parse("1990-01-01")))
+					{	
 						preSerie.add(c);
+					}
 					else if(formatter.parse(c.getNaissance()).after(formatter.parse("2000-01-01")))
+					{
 						troSerie.add(c);
-					else
+					}
+					else {
 						deuSerie.add(c);
+					}
 				} catch (ParseException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -304,33 +390,56 @@ public class Modele {
 			}
 		}
 		
-		Map<String, Integer> grps1 = new HashMap<String, Integer>();
-		preSerie.stream().forEach(c -> mapAjout(grps1, c.getGroup().toString()));
-		
+		System.out.println(preSerie);
+		System.out.println(deuSerie);
+		System.out.println(troSerie);	
 		ArrayList<XYChart.Series<Number, String>> seriesList = new ArrayList<XYChart.Series<Number, String>>();
 		
-		XYChart.Series<Number, String> serieHor1 = new XYChart.Series<Number, String>();
-		grps1.forEach((v,n) -> serieHor1.getData().add(new XYChart.Data<Number, String>(n,v)));
-		seriesList.add(serieHor1);
+		XYChart.Series<Number, String> seriesHors1 = new XYChart.Series<Number, String>();
+		seriesHors1.setName("<1990-01-01");	
+		Map<String, Number> grps1 = new HashMap<String, Number>();
+		for (Contact c : preSerie) {
+			mapAjout(grps1, c.getGroup().getName());
+		}
 		
-		Map<String, Integer> grps2 = new HashMap<String, Integer>();
-		deuSerie.stream().forEach(c -> mapAjout(grps2, c.getGroup().toString()));
-		XYChart.Series<Number, String> serieHor2 = new XYChart.Series<Number, String>();
-		grps2.forEach((v,n) -> serieHor2.getData().add(new XYChart.Data<Number, String>(n,v)));
-		seriesList.add(serieHor2);
-		
-		Map<String, Integer> grps3 = new HashMap<String, Integer>();
-		troSerie.stream().forEach(c -> mapAjout(grps3, c.getGroup().toString()));
-		XYChart.Series<Number, String> serieHor3 = new XYChart.Series<Number, String>();
-		grps3.forEach((v,n) -> serieHor3.getData().add(new XYChart.Data<Number, String>(n,v)));
-		seriesList.add(serieHor3);
-		
-		histHorSerie.setValue(seriesList);
+	    for (Entry<String, Number> entry : grps1.entrySet()) {
+	    	seriesHors1.getData().add(new XYChart.Data<>(entry.getValue(), entry.getKey()));
+	    }
+	    seriesList.add(seriesHors1);
+	    
+		XYChart.Series<Number, String> seriesHors2 = new XYChart.Series<Number, String>();
+		seriesHors2.setName("entre");	
+		Map<String, Number> grps2 = new HashMap<String, Number>();
+		for (Contact c : deuSerie) {
+			mapAjout(grps2, c.getGroup().getName());
+		}
+
+	    for (Entry<String, Number> entry : grps2.entrySet()) {
+	    	seriesHors2.getData().add(new XYChart.Data<>(entry.getValue(), entry.getKey()));
+	    }
+	    seriesList.add(seriesHors2);
+	    
+	    
+	    
+		XYChart.Series<Number, String> seriesHors3 = new XYChart.Series<Number, String>();
+		seriesHors3.setName(">2000-01-01");	
+		Map<String, Number> grps3 = new HashMap<String, Number>();
+		for (Contact c : troSerie) {
+			mapAjout(grps3, c.getGroup().getName());
+		}
+
+	    for (Entry<String, Number> entry : grps3.entrySet()) {
+	    	seriesHors3.getData().add(new XYChart.Data<>(entry.getValue(), entry.getKey()));
+	    }
+	    seriesList.add(seriesHors3);
+	    
+	    histHorSerie.setValue(seriesList);
+
 	}
 	
-	void mapAjout(Map<String, Integer> map, String nom){
+	void mapAjout(Map<String, Number> map, String nom){
 		if(map.containsKey(nom))
-			map.put(nom, map.get(nom)+1);
+			map.put(nom, map.get(nom).intValue()+1);
 		else
 			map.put(nom, 1);
 	}

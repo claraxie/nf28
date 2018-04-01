@@ -128,10 +128,10 @@
                         <PieChart fx:id="pie" layoutX="16.0" layoutY="11.0" prefHeight="390.0" prefWidth="417.0" title="Contacts par groupe" />
                         <BarChart fx:id="histhor" layoutX="474.0" layoutY="14.0" prefHeight="354.0" prefWidth="353.0" title="Classes d'age">
                           <xAxis>
-                            <CategoryAxis side="BOTTOM" />
+                            <NumberAxis side="BOTTOM" />                          
                           </xAxis>
                           <yAxis>
-                            <NumberAxis side="LEFT" />
+                          	<CategoryAxis side="LEFT" />
                           </yAxis>
                         </BarChart>
                      </children>

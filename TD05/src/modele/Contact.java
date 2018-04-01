@@ -4,6 +4,7 @@ import java.io.Externalizable;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
+import java.time.LocalDate;
 
 public class Contact implements Externalizable {
 
@@ -33,7 +34,7 @@ public class Contact implements Externalizable {
 		pays = c.getPays();
 		naissance = c.getNaissance();
 		sexeF = c.getSexeF();
-		sexeM = c.getSexeM();		
+		sexeM = c.getSexeM();
 	}
 	
 	public Contact(Group grp) {
@@ -89,7 +90,6 @@ public class Contact implements Externalizable {
 	}
 	
 	public void setNom(String n) {
-		System.out.println("setname");
 		System.out.println(n);
 		this.nom = n;
 	}
