@@ -130,8 +130,9 @@ public class Controleur implements Initializable {
 	public void initialize(URL location, ResourceBundle resources) {
 		modele.initialize();
 		
-		rootNode = new TreeItem<>();
+		pays.setItems(modele.getCountries());
 		
+		rootNode = new TreeItem<>();		
 		parentItem = rootNode;	//set parent item
 		currentItem = rootNode;	//set current item as root
 		rootNode.setValue("Fiche de contacts");
@@ -140,20 +141,52 @@ public class Controleur implements Initializable {
 		tree.setEditable(true);
 		tree.setCellFactory(param -> new TextFieldTreeCellImpl());
 		
-		pays.setItems(modele.getCountries());
+		tree.getSelectionModel().selectedItemProperty().addListener(
+				(obj, oldValue, newValue)->{
+					
+					if (newValue.getValue() instanceof String) {
+						contactPane.visibleProperty().set(false);
+					}
+					
+					if(newValue.getValue() instanceof Group) {
+						contactPane.visibleProperty().set(false);
+					}
+					
+					if(newValue.getValue() instanceof Contact) {
+						modele.setContact((Contact)newValue.getValue());
+						contactPane.visibleProperty().set(true);
+					}
+					
+					System.out.println("Control: selected = " 
+							+ newValue +
+							" " + newValue.getClass().getName());
+					currentItem = newValue;
+					System.out.println(currentItem.getValue() instanceof String);
+					if(currentItem.equals(rootNode)) {
+						parentItem = rootNode;
+					}
+					else {
+						parentItem = currentItem.getParent();
+					}
+					
+				}
+			);
+		
+		
 		
 		prenom.textProperty().bindBidirectional(modele.getPrenom());
 		nom.textProperty().bindBidirectional(modele.getNom());
 		adresse.textProperty().bindBidirectional(modele.getAdresse());
 		postal.textProperty().bindBidirectional(modele.getPostal());
 		ville.textProperty().bindBidirectional(modele.getVille());
-		//pays.getSelectionModel().selectedItemProperty().addListener((observable, oldVal, newVal) -> modele.setPays(newVal));		
 		add.setOnAction(evt -> modele.create(currentItem));
 		delete.setOnAction(evt -> modele.delete(currentItem));
 		save.setOnAction(evt -> modele.save());
 		
 		sexeF.selectedProperty().bindBidirectional(modele.getSexeF());
 		sexeM.selectedProperty().bindBidirectional(modele.getSexeM());
+		
+		
 		
 		load.setOnAction(evt -> {			
 			currentItem = rootNode;
@@ -197,31 +230,7 @@ public class Controleur implements Initializable {
 				}
 			);
 		
-		tree.getSelectionModel().selectedItemProperty().addListener(
-				(obj, oldValue, newValue)->{
-					if (newValue.getValue() instanceof String) {
-						contactPane.visibleProperty().set(false);
-					}
-					
-					if(newValue.getValue() instanceof Group) {
-						contactPane.visibleProperty().set(false);
-					}
-					
-					if(newValue.getValue() instanceof Contact) {
-						modele.setContact((Contact)newValue.getValue());
-						contactPane.visibleProperty().set(true);
-					}
-					
-					currentItem = newValue;
-					if(currentItem.equals(rootNode)) {
-						parentItem = rootNode;
-					}
-					else {
-						parentItem = currentItem.getParent();
-					}
-					
-				}
-			);
+		
 		
 		// save error listener
 		errorListener = changed -> {
@@ -393,7 +402,7 @@ public class Controleur implements Initializable {
 	
 	
 	private final class TextFieldTreeCellImpl extends TreeCell<Object> {
-		 
+   	 
         private TextField textField;
  
         public TextFieldTreeCellImpl() {
@@ -406,7 +415,6 @@ public class Controleur implements Initializable {
 			}
         	
             super.startEdit();
-            
             if (textField == null) {
                 createTextField();
             }
@@ -425,20 +433,20 @@ public class Controleur implements Initializable {
         @Override
         public void updateItem(Object item, boolean empty) {
             super.updateItem(item, empty);
-            
+ 
             if (empty) {
                 setText(null);
                 setGraphic(null);
             } else {
                 if (isEditing()) {
                     if (textField != null) {
-                        textField.setText(getString());         
+                        textField.setText(getString());
                     }
                     setText(null);
                     setGraphic(textField);
                 } else {
                     setText(getString());
-                    setGraphic(getTreeItem().getGraphic()); 
+                    setGraphic(getTreeItem().getGraphic());
                 }
             }
         }
@@ -451,7 +459,7 @@ public class Controleur implements Initializable {
                 public void handle(KeyEvent t) {
                     if (t.getCode() == KeyCode.ENTER) {
                     	((Group)getTreeItem().getValue()).getGroupeProperty().set(textField.getText());
-                        commitEdit(textField.getText());
+                    	commitEdit((Group)getTreeItem().getValue());
                     } else if (t.getCode() == KeyCode.ESCAPE) {
                         cancelEdit();
                     }

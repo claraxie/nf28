@@ -37,7 +37,6 @@ public class Modele {
 	public ObservableList<PieChart.Data> groupeCirculaire = FXCollections.observableArrayList();
 	public ObservableList<XYChart.Data<String, Number>> groupeHistVert = FXCollections.observableArrayList();
 	public ObservableList<XYChart.Data<Number, String>> groupeHistHor = FXCollections.observableArrayList();
-	private static final long serialVersionUID = 1L;
 	
 	StringProperty prenom = new SimpleStringProperty(null, "prenom", "");
 	StringProperty nom = new SimpleStringProperty(null, "nom", "");
@@ -197,6 +196,7 @@ public class Modele {
 	}
 	
 	public void create(TreeItem<Object> select) {
+		System.out.println(select.getValue() instanceof String);
 		if (select.getValue() instanceof String) {
 			createGroup();
 		}
