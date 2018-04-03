@@ -2,18 +2,11 @@ package modele;
 
 import java.io.Externalizable;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.ObjectInput;
-import java.io.ObjectInputStream;
 import java.io.ObjectOutput;
-import java.io.ObjectOutputStream;
 import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -54,12 +47,12 @@ public class Workspace implements Externalizable {
 	public ArrayList<GroupModele> fromFile(File file) throws Exception{
 
 		String iStream = new String(Files.readAllBytes(file.toPath()));
-		System.out.println(iStream);
+//		System.out.println(iStream);
 		
 		WorkspaceModele work = new WorkspaceModele();
 		work = ModelJson.deserialize(iStream, WorkspaceModele.class);
 		groupes = work.groupes;
-		System.out.println(groupes);
+//		System.out.println(groupes);
 		return groupes;
 	}
 	
@@ -76,7 +69,7 @@ public class Workspace implements Externalizable {
 		FileWriter file;
 		file = new FileWriter(f);
 		String oStream = getMapper().writeValueAsString(this);
-		System.out.println(oStream);
+//		System.out.println(oStream);
 		file.write(oStream);
 		file.flush();
 		file.close();
